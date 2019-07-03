@@ -13,8 +13,9 @@ export default class EmptyCell extends Cell {
             this.updateState();
         } else {
             this.node.innerHTML = '';
-            this.sandbox.showNearEmptyCell(this.x, this.y);
             this.updateState();
+            this.sandbox.showNearEmptyCell(this.sandbox.index);
+           
         }
 
     }

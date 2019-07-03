@@ -5,13 +5,16 @@ import Cell from './Cell';
 export default class GameField {
 	constructor(width = 10, height = 10, context = document.body) {
 		this.listCell = [];
+		let temp = -1;
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
+				temp += 1;
 				const Cell = Math.random() > .9 ? Bomb : EmptyCell;
 				const sandbox = {
 					getCountBomb: this.getCountBomb.bind(this),
 					showAllBomb: this.showAllBomb.bind(this),
-					showNearEmptyCell: this.showNearEmptyCell.bind(this)
+					showNearEmptyCell: this.showNearEmptyCell.bind(this),
+					index: temp
 				};
 
 				this.listCell.push(new Cell(x, y, context, sandbox))
@@ -34,41 +37,40 @@ export default class GameField {
 		return this.listCell.filter(cell => cell.x === x && cell.y === y)[0];
 	}
 
-	showNearEmptyCell(mainX, mainY) {
+	showNearEmptyCell(index) {
 
-		// let myCell;
-		this.listCell.forEach((elem, index) => {
+		if (index % 10 == 9) {
+			this.showMe(this.listCell[index - 1])
+			this.showMe(this.listCell[index - 10])
+			this.showMe(this.listCell[index + 10])
+			this.showMe(this.listCell[index - 11])
+			this.showMe(this.listCell[index + 9])
+		} else if (index % 10 == 0) {
+			this.showMe(this.listCell[index + 1])
+			this.showMe(this.listCell[index - 10])
+			this.showMe(this.listCell[index + 10])
+			this.showMe(this.listCell[index + 11])
+			this.showMe(this.listCell[index - 9])
+		} else {
+			this.showMe(this.listCell[index + 1])
+			this.showMe(this.listCell[index - 1])
+			this.showMe(this.listCell[index - 10])
+			this.showMe(this.listCell[index + 10])
+			this.showMe(this.listCell[index + 11])
+			this.showMe(this.listCell[index - 11])
+			this.showMe(this.listCell[index + 9])
+			this.showMe(this.listCell[index - 9])
+		}
 
-			if (elem.x == mainX - 1 && elem.y == mainY - 1 ||
-				elem.x == mainX && elem.y == mainY - 1) {
-				setTimeout(function () { elem.click() }, 0);
-			}
-			if (elem.x == mainX + 1 && elem.y == mainY - 1 ||
-				elem.x == mainX + 1 && elem.y == mainY) {
-				setTimeout(function () { elem.click() }, 0);
-			}
-			if (elem.x == mainX - 1 && elem.y == mainY ||
-				elem.x == mainX - 1 && elem.y == mainY + 1) {
-				setTimeout(function () { elem.click() }, 0);
-			} 
-			if (elem.x == mainX && elem.y == mainY + 1 ||
-				elem.x == mainX + 1 && elem.y == mainY) {
-				setTimeout(function () { elem.click() }, 0);
-			} 
-
-
-		})
-
-		// console.log(myCell);
-	
 
 	}
 
 	showMe(cell) {
-		if (cell) {
+		if (cell && cell.state != 1) {
 			cell.click();
 		}
 	}
+
 
 	getCountBomb(x, y) {
 		return [

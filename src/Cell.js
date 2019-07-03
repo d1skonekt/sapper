@@ -19,7 +19,7 @@ export default class Cell {
     }
 
     updateState() {
-        
+
     }
 
     click() {
